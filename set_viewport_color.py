@@ -12,47 +12,7 @@ bl_info = {
 }
 
 
-def main(context):
-    for ob in context.selected_editable_objects:
-        avg = 0
-        ct = 0
-        getColorInput = False
-        getColorOutput = False
-        
-        for i in ob.material_slots:
-            if i.material.use_nodes == True:
-                avg = 0
-                ct = 0
-                for n in i.material.node_tree.nodes:
-                    print(n.name)
-                    
-                    getColorInput = False
-                    getColorOutput = False
-                    
-                    if n.name.find("BSDF") != -1:
-                        getColorInput = True
-                    if n.name == "RGB":
-                        getColorOutput = True
-                        
-                    if getColorInput == True:
-                        if isinstance(avg,list):
-                            avg = n.inputs[0].default_value
-                        else:
-                            avg = numpy.add(avg,n.inputs[0].default_value)
-                            ct = ct + 1                         
-                    if getColorOutput == True:
-                        if isinstance(avg,list):
-                            avg = n.inputs[0].default_value
-                        else:
-                            avg = numpy.add(avg,n.outputs[0].default_value)
-                            ct = ct + 1             
-                    
-                if ct == 0:
-                    avg = [1,1,1,1]
-                else:
-                    avg = numpy.divide(avg,ct)  
-                          
-                ob.active_material.diffuse_color = avg
+
         
 class SetViewportColor(bpy.types.Operator):
     """Tooltip"""
@@ -64,9 +24,62 @@ class SetViewportColor(bpy.types.Operator):
         return context.active_object is not None
 
     def execute(self, context):
-        main(context)
-        return {'FINISHED'}
-
+        for ob in context.selected_editable_objects:
+            avg = 0
+            ct = 0
+            getColorInput = False
+            getColorOutput = False
+            
+            for i in ob.material_slots:
+                if i.material.use_nodes == True:
+                    avg = 0
+                    ct = 0
+                    for n in i.material.node_tree.nodes:
+                        
+                        self.report({'INFO'},n.type)
+                        getColorInput = False
+                        getColorOutput = False
+                        
+                        #Nodes with inputs
+                        if n.type.find("BSDF") != -1 and n.inputs[0].is_linked == False:
+                            getColorInput = True
+                        if n.type == "AMBIENT_OCCLUSION" and n.inputs[0].is_linked == False:
+                            self.report({'INFO'},"AA")
+                            getColorInput = True                        
+                        if n.type.find("EMISSION") != -1 and n.inputs[0].is_linked == False:
+                            getColorInput = True   
+                        if n.type.find("EEVEE_SPECULAR") != -1 and n.inputs[0].is_linked == False:
+                            getColorInput = True  
+                        if n.type.find("SUBSURFACE_SCATTERING") != -1 and n.inputs[0].is_linked == False:
+                            getColorInput = True      
+                            
+                                                                                                             
+                        #nodes with outputs        
+                        if n.type == "RGB":
+                            getColorOutput = True
+                            
+                            
+                            
+                        if getColorInput == True:
+                            if isinstance(avg,list):
+                                avg = n.inputs[0].default_value
+                            else:
+                                avg = numpy.add(avg,n.inputs[0].default_value)
+                                ct = ct + 1                         
+                        if getColorOutput == True:
+                            if isinstance(avg,list):
+                                avg = n.inputs[0].default_value
+                            else:
+                                avg = numpy.add(avg,n.outputs[0].default_value)
+                                ct = ct + 1             
+                        
+                    if ct == 0:
+                        avg = [1,1,1,1]
+                    else:
+                        avg = numpy.divide(avg,ct)  
+                              
+                    ob.active_material.diffuse_color = avg
+        return {'FINISHED'}    
 
 def register():
     bpy.utils.register_class(SetViewportColor)
@@ -80,4 +93,4 @@ if __name__ == "__main__":
     register()
 
     # test call
-    bpy.ops.object.set_viewport_color()
+    #bpy.ops.object.set_viewport_color()
