@@ -5,7 +5,7 @@ bl_info = {
     "name": "Set Viewport Color",
     "description": "Set a viewport color based on materials",
     "author": "Johnny Matthews",
-    "version": (1, 1),
+    "version": (1, 2),
     "blender": (2, 82, 0),
     "support": "COMMUNITY",
     "category": "Object"
@@ -36,7 +36,7 @@ class SetViewportColor(bpy.types.Operator):
                     ct = 0
                     for n in i.material.node_tree.nodes:
                         
-                        self.report({'INFO'},n.type)
+                        #self.report({'INFO'},n.type)
                         getColorInput = False
                         getColorOutput = False
                         
