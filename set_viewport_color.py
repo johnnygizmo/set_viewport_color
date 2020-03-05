@@ -85,7 +85,7 @@ class WM_OT_button_context_setviewportcolor(bpy.types.Operator):
 def draw_menu(self, context):
     layout = self.layout
     layout.separator()
-    layout.operator("wm.set_viewport_color",text="Update Viewport Color")
+    layout.operator("wm.set_viewport_color",text="Set Viewport Color")
 
 
 def register():
