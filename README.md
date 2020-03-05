@@ -12,3 +12,6 @@ This takes any of the following nodes in the tree and averages their color input
 * RGB
 
 If none of these nodes exist in the tree, the color will be set as full white
+
+If a principled BSDF node is used, the default roughness and metallic will be set as well.
+
