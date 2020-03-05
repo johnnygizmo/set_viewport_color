@@ -1,11 +1,12 @@
 import bpy
 import numpy
+from bpy.types import Menu
 
 bl_info = {
     "name": "Set Viewport Color",
     "description": "Set a viewport color based on materials",
     "author": "Johnny Matthews",
-    "version": (1, 2),
+    "version": (1, 3),
     "blender": (2, 82, 0),
     "support": "COMMUNITY",
     "category": "Object"
@@ -14,9 +15,9 @@ bl_info = {
 
 
         
-class SetViewportColor(bpy.types.Operator):
+class WM_OT_button_context_setviewportcolor(bpy.types.Operator):
     """Tooltip"""
-    bl_idname = "object.set_viewport_color"
+    bl_idname = "wm.set_viewport_color"
     bl_label = "Set Viewport Color"
 
     @classmethod
@@ -56,9 +57,7 @@ class SetViewportColor(bpy.types.Operator):
                                                                                                              
                         #nodes with outputs        
                         if n.type == "RGB":
-                            getColorOutput = True
-                            
-                            
+                            getColorOutput = True     
                             
                         if getColorInput == True:
                             if isinstance(avg,list):
@@ -81,16 +80,25 @@ class SetViewportColor(bpy.types.Operator):
                     ob.active_material.diffuse_color = avg
         return {'FINISHED'}    
 
+
+
+def draw_menu(self, context):
+    layout = self.layout
+    layout.separator()
+    layout.operator("wm.set_viewport_color",text="Update Viewport Color")
+
+
 def register():
-    bpy.utils.register_class(SetViewportColor)
+    bpy.utils.register_class(WM_OT_button_context_setviewportcolor)
+    bpy.types.VIEW3D_MT_object_context_menu.append(draw_menu)
 
 
 def unregister():
-    bpy.utils.unregister_class(SetViewportColor)
+    bpy.utils.unregister_class(WM_OT_button_context_setviewportcolor)
+    bpy.types.VIEW3D_MT_object_context_menu.remove(draw_menu)
 
 
 if __name__ == "__main__":
     register()
 
-    # test call
-    #bpy.ops.object.set_viewport_color()
+
