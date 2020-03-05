@@ -6,7 +6,7 @@ bl_info = {
     "name": "Set Viewport Color",
     "description": "Set a viewport color based on materials",
     "author": "Johnny Matthews",
-    "version": (1, 3),
+    "version": (1, 4),
     "blender": (2, 82, 0),
     "support": "COMMUNITY",
     "category": "Object"
@@ -37,23 +37,43 @@ class WM_OT_button_context_setviewportcolor(bpy.types.Operator):
                     ct = 0
                     for n in i.material.node_tree.nodes:
                         
-                        #self.report({'INFO'},n.type)
+                        self.report({'INFO'},n.type)
                         getColorInput = False
                         getColorOutput = False
                         
                         #Nodes with inputs
                         if n.type.find("BSDF") != -1 and n.inputs[0].is_linked == False:
                             getColorInput = True
-                        if n.type == "AMBIENT_OCCLUSION" and n.inputs[0].is_linked == False:
+                        elif n.type == "AMBIENT_OCCLUSION" and n.inputs[0].is_linked == False:
                             self.report({'INFO'},"AA")
                             getColorInput = True                        
-                        if n.type.find("EMISSION") != -1 and n.inputs[0].is_linked == False:
+                        elif n.type.find("EMISSION") != -1 and n.inputs[0].is_linked == False:
                             getColorInput = True   
-                        if n.type.find("EEVEE_SPECULAR") != -1 and n.inputs[0].is_linked == False:
+                        elif n.type.find("EEVEE_SPECULAR") != -1 and n.inputs[0].is_linked == False:
                             getColorInput = True  
-                        if n.type.find("SUBSURFACE_SCATTERING") != -1 and n.inputs[0].is_linked == False:
+                        elif n.type.find("SUBSURFACE_SCATTERING") != -1 and n.inputs[0].is_linked == False:
                             getColorInput = True      
                             
+                        
+                        if n.type == "BSDF_PRINCIPLED":
+                            bpy.context.object.active_material.metallic = n.inputs[4].default_value
+                            bpy.context.object.active_material.roughness = n.inputs[7].default_value
+                        elif n.type == "BSDF_DIFFUSE":
+                            bpy.context.object.active_material.metallic = 0
+                            bpy.context.object.active_material.roughness = n.inputs[1].default_value
+                        elif n.type == "BSDF_GLASS":
+                            bpy.context.object.active_material.metallic = 0
+                            bpy.context.object.active_material.roughness = n.inputs[1].default_value
+                        elif n.type == "BSDF_GLOSSY":
+                            bpy.context.object.active_material.metallic = 0
+                            bpy.context.object.active_material.roughness = n.inputs[1].default_value
+                        elif n.type == "BSDF_REFRACTION":
+                            bpy.context.object.active_material.metallic = 0
+                            bpy.context.object.active_material.roughness = n.inputs[1].default_value
+                        elif n.type == "EEVEE_SPECULAR":
+                            bpy.context.object.active_material.metallic = 0
+                            bpy.context.object.active_material.roughness = n.inputs[2].default_value
+                        
                                                                                                              
                         #nodes with outputs        
                         if n.type == "RGB":
