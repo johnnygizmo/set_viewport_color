@@ -6,7 +6,7 @@ bl_info = {
     "name": "Set Viewport Color",
     "description": "Set a viewport color based on materials",
     "author": "Johnny Matthews",
-    "version": (1, 4),
+    "version": (1, 5),
     "blender": (2, 82, 0),
     "support": "COMMUNITY",
     "category": "Object"
