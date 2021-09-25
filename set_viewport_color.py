@@ -6,7 +6,7 @@ bl_info = {
     "name": "Set Viewport Color",
     "description": "Set a viewport color based on materials",
     "author": "Johnny Matthews",
-    "version": (1, 4),
+    "version": (1, 5),
     "blender": (2, 82, 0),
     "support": "COMMUNITY",
     "category": "Object"
@@ -56,8 +56,8 @@ class WM_OT_button_context_setviewportcolor(bpy.types.Operator):
                             
                         
                         if n.type == "BSDF_PRINCIPLED":
-                            bpy.context.object.active_material.metallic = n.inputs[4].default_value
-                            bpy.context.object.active_material.roughness = n.inputs[7].default_value
+                            bpy.context.object.active_material.metallic = n.inputs["Metallic"].default_value
+                            bpy.context.object.active_material.roughness = n.inputs["Roughness"].default_value
                         elif n.type == "BSDF_DIFFUSE":
                             bpy.context.object.active_material.metallic = 0
                             bpy.context.object.active_material.roughness = n.inputs[1].default_value
