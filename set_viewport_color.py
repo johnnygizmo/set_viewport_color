@@ -56,8 +56,8 @@ class WM_OT_button_context_setviewportcolor(bpy.types.Operator):
                             
                         
                         if n.type == "BSDF_PRINCIPLED":
-                            bpy.context.object.active_material.metallic = n.inputs[4].default_value
-                            bpy.context.object.active_material.roughness = n.inputs[7].default_value
+                            bpy.context.object.active_material.metallic = n.inputs[6].default_value
+                            bpy.context.object.active_material.roughness = n.inputs[9].default_value
                         elif n.type == "BSDF_DIFFUSE":
                             bpy.context.object.active_material.metallic = 0
                             bpy.context.object.active_material.roughness = n.inputs[1].default_value
